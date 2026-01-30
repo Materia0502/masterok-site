@@ -290,3 +290,9 @@ button:active {
         overflow-y: auto;
     }
 }
+
+.cart-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
