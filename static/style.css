@@ -9,17 +9,13 @@ body::before {
     position: fixed;
     inset: 0;
 
-    background-image: url("/static/bg.jpg");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background: url("/static/bg.jpg") center / cover no-repeat;
 
     filter: blur(2px) brightness(0.9);
     transform: scale(1.05);
 
     z-index: -1;
 }
-
 
 /* Шапка */
 header {
