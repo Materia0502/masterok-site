@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Стройматериалы</title>
+    <link rel="stylesheet" href="/static/style.css?v=3">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</style>
+</head>
+<body>
+
+<header>
+    Мастерок
+    <span id="cartCount" style="float:right; font-size:16px; cursor:pointer;">
+        🛒 Корзина (0)
+    </span>
+</header>
+
+<section>
+
+    <h2>Каталог</h2>
+
+    <div class="products">
+    {% for p in products %}
+    <div class="product">
+        <h3>{{ p.name }}</h3>
+        <p>Цена: {{ p.price }} ₽</p>
+        <button onclick="addToCart('{{ p.name }}', {{ p.price }})">
+            Купить
+        </button>
+    </div>
+    {% endfor %}
+</div>
+
+</section>
+
+<section>
+    <h2>Заявка в команду</h2>
+    <form method="post" action="/team">
+        <input type="text" name="name" placeholder="Ваше имя" required>
+        <input type="text" name="phone" placeholder="Телефон" required>
+        <select name="service">
+            <option>Доставка</option>
+            <option>Консультация</option>
+            <option>Оптовый заказ</option>
+        </select>
+        <button type="submit">Отправить</button>
+    </form>
+</section>
+
+<button id="toTop">↑</button>
+
+<script>
+const btn = document.getElementById("toTop");
+
+window.addEventListener("scroll", () => {
+    btn.style.display = window.scrollY > 300 ? "block" : "none";
+});
+
+btn.onclick = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+};
+</script>
+
+<div id="cartModal" class="cart-modal">
+    <div class="cart-content">
+        <h3>Корзина</h3>
+
+        <ul id="cartItems"></ul>
+
+        <button onclick="openOrder()">Оформить заказ</button>
+        <button onclick="clearCart()">Очистить</button>
+        <button onclick="closeCart()">Закрыть</button>
+    </div>
+</div>
+
+<script>
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+function addToCart(name, price) {
+    cart.push({ name, price });
+    saveCart();
+    updateCart();
+}
+
+function updateCart() {
+    document.getElementById("cartCount").innerText =
+        "🛒 Корзина (" + cart.length + ")";
+}
+
+function openCart() {
+    document.getElementById("cartModal").style.display = "block";
+    const list = document.getElementById("cartItems");
+    list.innerHTML = "";
+
+    let total = 0;
+
+    cart.forEach((item, index) => {
+        const li = document.createElement("li");
+        li.style.display = "flex";
+        li.style.justifyContent = "space-between";
+        li.style.alignItems = "center";
+
+        li.innerHTML = `
+    <span>${item.name} — ${item.price} ₽</span>
+    <button type="button" onclick="removeItem(${index})">❌</button>
+`;
+
+        list.appendChild(li);
+        total += item.price;
+    });
+
+    const totalLi = document.createElement("li");
+    totalLi.style.fontWeight = "bold";
+    totalLi.style.marginTop = "10px";
+    totalLi.innerText = "Итого: " + total + " ₽";
+    list.appendChild(totalLi);
+}
+
+
+function closeCart() {
+    document.getElementById("cartModal").style.display = "none";
+}
+
+function clearCart() {
+    cart = [];
+    saveCart();
+    updateCart();
+    document.getElementById("cartItems").innerHTML = "";
+}
+
+/* оформление заказа */
+function openOrder() {
+    document.getElementById("cartModal").style.display = "none";
+    document.getElementById("orderModal").style.display = "block";
+}
+
+function closeOrder() {
+    document.getElementById("orderModal").style.display = "none";
+}
+
+function submitOrder() {
+    const name = document.getElementById("orderName").value;
+    const phone = document.getElementById("orderPhone").value;
+
+    if (!name || !phone) {
+        alert("Заполните имя и телефон");
+        return;
+    }
+
+    let total = cart.reduce((sum, item) => sum + item.price, 0);
+
+    alert(
+        "Спасибо за заказ!\n\n" +
+        "Имя: " + name + "\n" +
+        "Телефон: " + phone + "\n" +
+        "Сумма: " + total + " ₽"
+    );
+
+    cart = [];
+    saveCart();
+    updateCart();
+    closeOrder();
+}
+
+/* запуск при загрузке */
+updateCart();
+document.getElementById("cartCount").onclick = openCart;
+
+function removeItem(index) {
+    cart.splice(index, 1);
+    saveCart();
+    updateCart();
+    openCart(); // перерисовать корзину
+}
+
+</script>
+
+
+<div id="orderModal" class="cart-modal">
+    <div class="cart-content">
+        <h3>Оформление заказа</h3>
+
+        <input type="text" id="orderName" placeholder="Ваше имя">
+        <input type="text" id="orderPhone" placeholder="Телефон">
+
+        <button onclick="submitOrder()">Отправить заказ</button>
+        <button onclick="closeOrder()">Отмена</button>
+    </div>
+</div>
+
+</body>
+</html>
