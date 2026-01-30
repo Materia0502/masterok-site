@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Стройматериалы</title>
-    <link rel="stylesheet" href="/static/style.css?v=12">
+    <link rel="stylesheet" href="/static/style.css?v=13">
 </head>
 
 <body>
@@ -191,13 +191,14 @@ function removeItem(index) {
 }
 
 <script>
-(function fixMobileCart() {
+function applyCartPosition() {
     const cart = document.getElementById("cartCount");
     if (!cart) return;
 
     const isMobile = window.innerWidth <= 768;
 
     if (isMobile) {
+        /* мобильная версия */
         cart.style.position = "fixed";
         cart.style.bottom = "16px";
         cart.style.right = "16px";
@@ -210,9 +211,27 @@ function removeItem(index) {
         cart.style.fontSize = "14px";
         cart.style.boxShadow = "0 8px 20px rgba(0,0,0,0.3)";
         cart.style.zIndex = "99999";
+    } else {
+        /* десктоп — возврат */
+        cart.style.position = "";
+        cart.style.bottom = "";
+        cart.style.right = "";
+        cart.style.top = "";
+
+        cart.style.background = "";
+        cart.style.color = "";
+        cart.style.padding = "";
+        cart.style.borderRadius = "";
+        cart.style.fontSize = "";
+        cart.style.boxShadow = "";
+        cart.style.zIndex = "";
     }
-})();
+}
+
+applyCartPosition();
+window.addEventListener("resize", applyCartPosition);
 </script>
+
 
 </script>
 
