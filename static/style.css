@@ -413,6 +413,50 @@ filter: blur(1px) brightness(0.85);
     }
 }
 
+/* анимация кнопки купить */
+button.buy-anim {
+    animation: buyPulse 0.3s ease;
+}
+
+@keyframes buyPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.9); }
+    100% { transform: scale(1); }
+}
+
+/* анимация корзины */
+#cartCount.cart-bounce {
+    animation: cartBounce 0.4s ease;
+}
+
+@keyframes cartBounce {
+    0%   { transform: scale(1); }
+    30%  { transform: scale(1.2); }
+    60%  { transform: scale(0.95); }
+    100% { transform: scale(1); }
+}
+
+.buy-anim {
+    animation: buyPulse 0.3s ease;
+}
+
+@keyframes buyPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.9); }
+    100% { transform: scale(1); }
+}
+
+#cartCount.cart-bounce {
+    animation: cartBounce 0.4s ease;
+}
+
+@keyframes cartBounce {
+    0% { transform: scale(1); }
+    30% { transform: scale(1.2); }
+    60% { transform: scale(0.95); }
+    100% { transform: scale(1); }
+}
+
 
 
 

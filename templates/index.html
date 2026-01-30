@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Стройматериалы</title>
-    <link rel="stylesheet" href="/static/style.css?v=5">
+    <link rel="stylesheet" href="/static/style.css?v=6">
 </head>
 
 <body>
@@ -26,10 +26,10 @@
         <div class="product fade-up">
             <h3>{{ p.name }}</h3>
             <p>Цена: {{ p.price }} ₽</p>
-            <button onclick="addToCart('{{ p.name }}', {{ p.price }})">
-                Купить
-            </button>
-        </div>
+              <button onclick="addToCart('{{ p.name }}', {{ p.price }}, this)">
+    Купить
+</button>
+      </div>
         {% endfor %}
     </div>
 
@@ -82,11 +82,23 @@ function saveCart() {
     localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-function addToCart(name, price) {
+function addToCart(name, price, btn) {
     cart.push({ name, price });
     saveCart();
     updateCart();
+
+    // анимация кнопки
+    if (btn) {
+        btn.classList.add("buy-anim");
+        setTimeout(() => btn.classList.remove("buy-anim"), 300);
+    }
+
+    // анимация корзины
+    const cartIcon = document.getElementById("cartCount");
+    cartIcon.classList.add("cart-bounce");
+    setTimeout(() => cartIcon.classList.remove("cart-bounce"), 400);
 }
+
 
 function updateCart() {
     document.getElementById("cartCount").innerText =
