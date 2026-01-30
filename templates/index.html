@@ -5,37 +5,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Стройматериалы</title>
-    <link rel="stylesheet" href="/static/style.css?v=4">
+    <link rel="stylesheet" href="/static/style.css?v=5">
 </head>
 
 <body>
 
-<header>
+<header class="fade-up">
     Мастерок
     <span id="cartCount" style="float:right; font-size:16px; cursor:pointer;">
         🛒 Корзина (0)
     </span>
 </header>
 
-<section>
+<section class="fade-up">
 
     <h2>Каталог</h2>
 
     <div class="products">
-    {% for p in products %}
-    <div class="product">
-        <h3>{{ p.name }}</h3>
-        <p>Цена: {{ p.price }} ₽</p>
-        <button onclick="addToCart('{{ p.name }}', {{ p.price }})">
-            Купить
-        </button>
+        {% for p in products %}
+        <div class="product fade-up">
+            <h3>{{ p.name }}</h3>
+            <p>Цена: {{ p.price }} ₽</p>
+            <button onclick="addToCart('{{ p.name }}', {{ p.price }})">
+                Купить
+            </button>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
 
 </section>
 
-<section>
+<section class="fade-up">
     <h2>Заявка в команду</h2>
     <form method="post" action="/team">
         <input type="text" name="name" placeholder="Ваше имя" required>
@@ -64,7 +64,7 @@ btn.onclick = () => {
 </script>
 
 <div id="cartModal" class="cart-modal">
-    <div class="cart-content">
+    <div class="cart-content fade-up">
         <h3>Корзина</h3>
 
         <ul id="cartItems"></ul>
@@ -107,9 +107,9 @@ function openCart() {
         li.style.alignItems = "center";
 
         li.innerHTML = `
-    <span>${item.name} — ${item.price} ₽</span>
-    <button type="button" onclick="removeItem(${index})">❌</button>
-`;
+            <span>${item.name} — ${item.price} ₽</span>
+            <button type="button" onclick="removeItem(${index})">❌</button>
+        `;
 
         list.appendChild(li);
         total += item.price;
@@ -121,7 +121,6 @@ function openCart() {
     totalLi.innerText = "Итого: " + total + " ₽";
     list.appendChild(totalLi);
 }
-
 
 function closeCart() {
     document.getElementById("cartModal").style.display = "none";
@@ -168,7 +167,6 @@ function submitOrder() {
     closeOrder();
 }
 
-/* запуск при загрузке */
 updateCart();
 document.getElementById("cartCount").onclick = openCart;
 
@@ -176,14 +174,12 @@ function removeItem(index) {
     cart.splice(index, 1);
     saveCart();
     updateCart();
-    openCart(); // перерисовать корзину
+    openCart();
 }
-
 </script>
 
-
 <div id="orderModal" class="cart-modal">
-    <div class="cart-content">
+    <div class="cart-content fade-up">
         <h3>Оформление заказа</h3>
 
         <input type="text" id="orderName" placeholder="Ваше имя">
