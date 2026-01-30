@@ -4,29 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Стройматериалы</title>
-    <link rel="stylesheet" href="/static/style.css?v=17">
+    <link rel="stylesheet" href="/static/style.css?v=20">
 </head>
 
 <body>
 
-<header class="fade-up">
+<header>
     Мастерок
 </header>
 
+<!-- ===== CART BUTTON ===== -->
 <div id="cartCount">🛒 Корзина (0)</div>
 
-<section class="fade-up">
+<!-- ===== CATALOG ===== -->
+<section>
     <h2>Каталог</h2>
 
     <div class="products">
         {% for p in products %}
-        <div class="product fade-up">
+        <div class="product">
             <h3>{{ p.name }}</h3>
             <p>Цена: {{ p.price }} ₽</p>
             <button
+                class="buy-btn"
                 data-name="{{ p.name }}"
                 data-price="{{ p.price }}"
-                onclick="addToCart(this)"
             >
                 Купить
             </button>
@@ -35,57 +37,72 @@
     </div>
 </section>
 
-<section class="fade-up">
-    <h2>Заявка в команду</h2>
-    <form method="post" action="/team">
-        <input type="text" name="name" placeholder="Ваше имя" required>
-        <input type="text" name="phone" placeholder="Телефон" required>
-        <select name="service">
-            <option>Доставка</option>
-            <option>Консультация</option>
-            <option>Оптовый заказ</option>
-        </select>
-        <button type="submit">Отправить</button>
-    </form>
-</section>
-
-<button id="toTop">↑</button>
-
 <!-- ===== CART MODAL ===== -->
 <div id="cartModal" class="cart-modal">
-    <div class="cart-content fade-up">
+    <div class="cart-content">
         <h3>Корзина</h3>
         <ul id="cartItems"></ul>
-        <button onclick="openOrder()">Оформить заказ</button>
-        <button onclick="clearCart()">Очистить</button>
-        <button onclick="closeCart()">Закрыть</button>
+
+        <button id="orderBtn">Оформить заказ</button>
+        <button id="clearBtn">Очистить</button>
+        <button id="closeCartBtn">Закрыть</button>
     </div>
 </div>
 
 <!-- ===== ORDER MODAL ===== -->
 <div id="orderModal" class="cart-modal">
-    <div class="cart-content fade-up">
+    <div class="cart-content">
         <h3>Оформление заказа</h3>
         <input type="text" id="orderName" placeholder="Ваше имя">
         <input type="text" id="orderPhone" placeholder="Телефон">
-        <button onclick="submitOrder()">Отправить заказ</button>
-        <button onclick="closeOrder()">Отмена</button>
+
+        <button id="sendOrderBtn">Отправить заказ</button>
+        <button id="closeOrderBtn">Отмена</button>
     </div>
 </div>
 
+<!-- ===== SCRIPT ===== -->
 <script>
-/* ===== SCROLL TO TOP ===== */
-const toTopBtn = document.getElementById("toTop");
+document.addEventListener("DOMContentLoaded", () => {
 
-window.addEventListener("scroll", () => {
-    toTopBtn.style.display = window.scrollY > 300 ? "block" : "none";
-});
+    /* ===== STATE ===== */
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-toTopBtn.onclick = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-};
+    const cartCount = document.getElementById("cartCount");
+    const cartModal = document.getElementById("cartModal");
+    const orderModal = document.getElementById("orderModal");
+    const cartItems = document.getElementById("cartItems");
 
-/* ===== CART ===== */
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    /* ===== HELPERS ===== */
+    function saveCart() {
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }
 
-function saveCart()
+    function updateCartCount() {
+        cartCount.textContent = `🛒 Корзина (${cart.length})`;
+    }
+
+    function renderCart() {
+        cartItems.innerHTML = "";
+        let total = 0;
+
+        cart.forEach((item, i) => {
+            const li = document.createElement("li");
+            li.innerHTML = `
+                <span>${item.name} — ${item.price} ₽</span>
+                <button data-index="${i}">❌</button>
+            `;
+            cartItems.appendChild(li);
+            total += item.price;
+        });
+
+        if (cart.length > 0) {
+            const totalLi = document.createElement("li");
+            totalLi.style.fontWeight = "bold";
+            totalLi.textContent = `Итого: ${total} ₽`;
+            cartItems.appendChild(totalLi);
+        }
+    }
+
+    /* ===== ADD TO CART ===== */
+    document.querySelector
