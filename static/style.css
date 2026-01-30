@@ -457,6 +457,10 @@ button.buy-anim {
     100% { transform: scale(1); }
 }
 
+#cartCount {
+    display: inline-block;
+}
+
 
 
 
