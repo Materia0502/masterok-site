@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Стройматериалы</title>
-    <link rel="stylesheet" href="/static/style.css?v=11">
+    <link rel="stylesheet" href="/static/style.css?v=12">
 </head>
 
 <body>
@@ -189,6 +189,31 @@ function removeItem(index) {
     updateCart();
     openCart();
 }
+
+<script>
+(function fixMobileCart() {
+    const cart = document.getElementById("cartCount");
+    if (!cart) return;
+
+    const isMobile = window.innerWidth <= 768;
+
+    if (isMobile) {
+        cart.style.position = "fixed";
+        cart.style.bottom = "16px";
+        cart.style.right = "16px";
+        cart.style.top = "auto";
+
+        cart.style.background = "#111";
+        cart.style.color = "#fff";
+        cart.style.padding = "12px 16px";
+        cart.style.borderRadius = "30px";
+        cart.style.fontSize = "14px";
+        cart.style.boxShadow = "0 8px 20px rgba(0,0,0,0.3)";
+        cart.style.zIndex = "99999";
+    }
+})();
+</script>
+
 </script>
 
 <div id="orderModal" class="cart-modal">
