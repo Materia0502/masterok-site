@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Стройматериалы</title>
-    <link rel="stylesheet" href="/static/style.css?v=13">
+    <link rel="stylesheet" href="/static/style.css?v=14">
 </head>
 
 <body>
@@ -14,12 +13,9 @@
     Мастерок
 </header>
 
-<div id="cartCount">
-    🛒 Корзина (0)
-</div>
+<div id="cartCount">🛒 Корзина (0)</div>
 
 <section class="fade-up">
-
     <h2>Каталог</h2>
 
     <div class="products">
@@ -27,13 +23,12 @@
         <div class="product fade-up">
             <h3>{{ p.name }}</h3>
             <p>Цена: {{ p.price }} ₽</p>
-              <button onclick="addToCart('{{ p.name }}', {{ p.price }}, this)">
-    Купить
-</button>
-      </div>
+            <button onclick="addToCart('{{ p.name }}', {{ p.price }}, this)">
+                Купить
+            </button>
+        </div>
         {% endfor %}
     </div>
-
 </section>
 
 <section class="fade-up">
@@ -52,200 +47,30 @@
 
 <button id="toTop">↑</button>
 
-<script>
-const btn = document.getElementById("toTop");
-
-window.addEventListener("scroll", () => {
-    btn.style.display = window.scrollY > 300 ? "block" : "none";
-});
-
-btn.onclick = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-};
-</script>
-
+<!-- ===== CART MODAL ===== -->
 <div id="cartModal" class="cart-modal">
     <div class="cart-content fade-up">
         <h3>Корзина</h3>
-
         <ul id="cartItems"></ul>
-
         <button onclick="openOrder()">Оформить заказ</button>
         <button onclick="clearCart()">Очистить</button>
         <button onclick="closeCart()">Закрыть</button>
     </div>
 </div>
 
-<script>
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-function saveCart() {
-    localStorage.setItem("cart", JSON.stringify(cart));
-}
-
-function addToCart(name, price, btn) {
-    cart.push({ name, price });
-    saveCart();
-    updateCart();
-
-    // анимация кнопки
-    if (btn) {
-        btn.classList.add("buy-anim");
-        setTimeout(() => btn.classList.remove("buy-anim"), 300);
-    }
-
-    // анимация корзины
-    const cartIcon = document.getElementById("cartCount");
-    cartIcon.classList.add("cart-bounce");
-    setTimeout(() => cartIcon.classList.remove("cart-bounce"), 400);
-}
-
-
-function updateCart() {
-    document.getElementById("cartCount").innerText =
-        "🛒 Корзина (" + cart.length + ")";
-}
-
-function openCart() {
-    document.getElementById("cartModal").style.display = "block";
-    const list = document.getElementById("cartItems");
-    list.innerHTML = "";
-
-    let total = 0;
-
-    cart.forEach((item, index) => {
-        const li = document.createElement("li");
-        li.style.display = "flex";
-        li.style.justifyContent = "space-between";
-        li.style.alignItems = "center";
-
-        li.innerHTML = `
-            <span>${item.name} — ${item.price} ₽</span>
-            <button type="button" onclick="removeItem(${index})">❌</button>
-        `;
-
-        list.appendChild(li);
-        total += item.price;
-    });
-
-    const totalLi = document.createElement("li");
-    totalLi.style.fontWeight = "bold";
-    totalLi.style.marginTop = "10px";
-    totalLi.innerText = "Итого: " + total + " ₽";
-    list.appendChild(totalLi);
-}
-
-function closeCart() {
-    document.getElementById("cartModal").style.display = "none";
-}
-
-function clearCart() {
-    cart = [];
-    saveCart();
-    updateCart();
-    document.getElementById("cartItems").innerHTML = "";
-}
-
-/* оформление заказа */
-function openOrder() {
-    document.getElementById("cartModal").style.display = "none";
-    document.getElementById("orderModal").style.display = "block";
-}
-
-function closeOrder() {
-    document.getElementById("orderModal").style.display = "none";
-}
-
-function submitOrder() {
-    const name = document.getElementById("orderName").value;
-    const phone = document.getElementById("orderPhone").value;
-
-    if (!name || !phone) {
-        alert("Заполните имя и телефон");
-        return;
-    }
-
-    let total = cart.reduce((sum, item) => sum + item.price, 0);
-
-    alert(
-        "Спасибо за заказ!\n\n" +
-        "Имя: " + name + "\n" +
-        "Телефон: " + phone + "\n" +
-        "Сумма: " + total + " ₽"
-    );
-
-    cart = [];
-    saveCart();
-    updateCart();
-    closeOrder();
-}
-
-updateCart();
-document.getElementById("cartCount").onclick = openCart;
-
-function removeItem(index) {
-    cart.splice(index, 1);
-    saveCart();
-    updateCart();
-    openCart();
-}
-
-<script>
-function applyCartPosition() {
-    const cart = document.getElementById("cartCount");
-    if (!cart) return;
-
-    const isMobile = window.innerWidth <= 768;
-
-    if (isMobile) {
-        /* мобильная версия */
-        cart.style.position = "fixed";
-        cart.style.bottom = "16px";
-        cart.style.right = "16px";
-        cart.style.top = "auto";
-
-        cart.style.background = "#111";
-        cart.style.color = "#fff";
-        cart.style.padding = "12px 16px";
-        cart.style.borderRadius = "30px";
-        cart.style.fontSize = "14px";
-        cart.style.boxShadow = "0 8px 20px rgba(0,0,0,0.3)";
-        cart.style.zIndex = "99999";
-    } else {
-        /* десктоп — возврат */
-        cart.style.position = "";
-        cart.style.bottom = "";
-        cart.style.right = "";
-        cart.style.top = "";
-
-        cart.style.background = "";
-        cart.style.color = "";
-        cart.style.padding = "";
-        cart.style.borderRadius = "";
-        cart.style.fontSize = "";
-        cart.style.boxShadow = "";
-        cart.style.zIndex = "";
-    }
-}
-
-applyCartPosition();
-window.addEventListener("resize", applyCartPosition);
-</script>
-
-
-</script>
-
+<!-- ===== ORDER MODAL ===== -->
 <div id="orderModal" class="cart-modal">
     <div class="cart-content fade-up">
         <h3>Оформление заказа</h3>
-
         <input type="text" id="orderName" placeholder="Ваше имя">
         <input type="text" id="orderPhone" placeholder="Телефон">
-
         <button onclick="submitOrder()">Отправить заказ</button>
         <button onclick="closeOrder()">Отмена</button>
     </div>
 </div>
 
-</body>
-</html>
+<script>
+/* ===== SCROLL TO TOP ===== */
+const toTopBtn = document.getElementById("toTop");
+
+window.addEventList

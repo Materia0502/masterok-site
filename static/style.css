@@ -1,3 +1,5 @@
+/* ===== BASE ===== */
+
 html, body {
     margin: 0;
     padding: 0;
@@ -8,70 +10,39 @@ body::before {
     content: "";
     position: fixed;
     inset: 0;
-
     background: url("/static/bg.jpg") center / cover no-repeat;
-
     filter: blur(2px) brightness(0.9);
     transform: scale(1.05);
-
     z-index: -1;
 }
 
-/* Шапка */
+/* ===== HEADER ===== */
+
 header {
     background: rgba(200, 200, 200, 0.9);
     color: #222;
-    padding: 18px 20px;   /* было 30px */
+    padding: 18px 20px;
     text-align: center;
-    font-size: 26px;     /* было 38px */
+    font-size: 26px;
     font-weight: bold;
     letter-spacing: 1px;
-
     position: sticky;
     top: 0;
     z-index: 10;
 }
 
-/* Основные блоки */
+/* ===== SECTIONS ===== */
+
 section {
     background: rgba(255, 255, 255, 0.6);
     padding: 20px;
     margin: 20px;
     border-radius: 12px;
-
     backdrop-filter: blur(8px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 
-/* Карточки товаров */
-.product {
-    background-color: transparent;
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 10px;
-}
-
-/* Кнопки — ОСТАВЛЯЕМ зелёными */
-button {
-    background: #27ae60;
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-}
-
-input, select {
-    display: block;
-    margin-bottom: 10px;
-    padding: 8px;
-}
-
-@media (max-width: 600px) {
-    header {
-        font-size: 20px;
-        padding: 12px;
-    }
-}
+/* ===== PRODUCTS ===== */
 
 .products {
     display: grid;
@@ -80,15 +51,11 @@ input, select {
 }
 
 .product {
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255,255,255,0.7);
     padding: 15px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.product h3 {
-    margin-top: 0;
+    transition: transform .2s ease, box-shadow .2s ease;
 }
 
 .product:hover {
@@ -96,15 +63,39 @@ input, select {
     box-shadow: 0 8px 20px rgba(0,0,0,0.25);
 }
 
+.product h3 {
+    margin-top: 0;
+}
+
+/* ===== FORMS ===== */
+
 form {
     display: grid;
     gap: 10px;
 }
 
 input, select {
+    padding: 8px;
     border-radius: 6px;
     border: 1px solid #ccc;
 }
+
+/* ===== BUTTONS ===== */
+
+button {
+    background: #27ae60;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    transition: transform .1s ease;
+}
+
+button:active {
+    transform: scale(0.96);
+}
+
+/* ===== SCROLL TO TOP ===== */
 
 #toTop {
     position: fixed;
@@ -114,6 +105,17 @@ input, select {
     padding: 10px 14px;
     border-radius: 50%;
     font-size: 18px;
+}
+
+/* ===== CART ===== */
+
+#cartCount {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    font-size: 16px;
+    cursor: pointer;
+    z-index: 9999;
 }
 
 .cart-modal {
@@ -130,61 +132,49 @@ input, select {
     margin: 100px auto;
     padding: 20px;
     border-radius: 10px;
+    display: flex;
+    flex-direction: column;
 }
 
 .cart-content ul {
     padding-left: 20px;
 }
 
+.cart-content li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+}
+
 .cart-content li button {
     background: transparent;
     border: none;
-    font-size: 16px;
+    font-size: 18px;
     cursor: pointer;
 }
 
-/* ===== Админка ===== */
+/* ===== ADMIN ===== */
 
 .admin-wrapper {
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0,0,0,0.4);
 }
 
 .admin-card {
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255,255,255,0.95);
     padding: 30px;
     width: 360px;
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
-.admin-card h2 {
-    text-align: center;
-    margin-top: 0;
-}
-
 .admin-form {
     display: grid;
     gap: 10px;
-    margin-bottom: 20px;
-}
-
-.admin-form input {
-    padding: 8px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-}
-
-.admin-form button {
-    background: #27ae60;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 6px;
-    cursor: pointer;
 }
 
 .admin-list {
@@ -195,23 +185,13 @@ input, select {
 .admin-list li {
     display: flex;
     justify-content: space-between;
-    padding: 6px 0;
     border-bottom: 1px solid #ddd;
-}
-
-.logout-btn {
-    display: block;
-    text-align: center;
-    margin-bottom: 20px;
-    color: #c0392b;
-    text-decoration: none;
-    font-weight: bold;
+    padding: 6px 0;
 }
 
 .edit-form {
     display: flex;
     gap: 6px;
-    align-items: center;
 }
 
 .edit-form input {
@@ -221,14 +201,54 @@ input, select {
 
 .edit-form button {
     background: #2980b9;
-    color: white;
-    border: none;
-    padding: 6px;
-    border-radius: 4px;
-    cursor: pointer;
 }
 
-@media (max-width: 480px) {
+/* ===== ANIMATIONS ===== */
+
+.fade-up {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp .6s ease-out forwards;
+}
+
+@keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.buy-anim {
+    animation: buyPulse .3s ease;
+}
+
+@keyframes buyPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(.9); }
+    100% { transform: scale(1); }
+}
+
+#cartCount.cart-bounce {
+    animation: cartBounce .5s cubic-bezier(.34,1.56,.64,1);
+}
+
+@keyframes cartBounce {
+    0% { transform: scale(1); }
+    30% { transform: scale(1.2); }
+    60% { transform: scale(.95); }
+    100% { transform: scale(1); }
+}
+
+/* ===== MOBILE ===== */
+
+@media (max-width: 768px) {
+
+    body::before {
+        filter: brightness(.75);
+    }
+
+    header {
+        position: static;
+        font-size: 18px;
+        padding: 12px;
+    }
 
     section {
         margin: 10px;
@@ -239,87 +259,30 @@ input, select {
         grid-template-columns: 1fr;
     }
 
-    .product {
-        padding: 18px;
-    }
-
-    .product h3 {
-        font-size: 18px;
-    }
-
-    .product p {
-        font-size: 16px;
-    }
-
-    button {
-        padding: 14px;
-        font-size: 16px;
+    .product button {
+        width: 100%;
+        padding: 16px;
+        font-size: 17px;
         border-radius: 10px;
     }
 
-    header {
-        font-size: 18px;
-    }
-
     #cartCount {
-        display: block;
-        margin-top: 10px;
-        float: none !important;
-    }
-
-    .cart-content {
-        width: calc(100% - 30px);
-        margin: 40px auto;
-    }
-
-    .cart-content button {
-        width: 100%;
-        margin-top: 8px;
-    }
-
-    .edit-form {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .edit-form input {
-        width: 100%;
-    }
-}
-
-@media (max-width: 480px) {
-
-    #cartCount {
-        position: fixed;
-        bottom: 15px;
-        right: 15px;
-        background: #27ae60;
-        color: white;
+        top: auto;
+        bottom: 16px;
+        right: 16px;
+        background: #111;
+        color: #fff;
         padding: 12px 16px;
         border-radius: 30px;
-        font-size: 16px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        z-index: 200;
+        font-size: 14px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
     }
-}
 
-@media (max-width: 480px) {
-    .product button {
-        width: 100%;
-        margin-top: 10px;
-        font-size: 17px;
-        padding: 16px;
-    }
-}
-
-@media (max-width: 480px) {
     .cart-content {
         width: 100%;
         height: 100%;
         margin: 0;
         border-radius: 0;
-        display: flex;
-        flex-direction: column;
     }
 
     .cart-content ul {
@@ -327,258 +290,3 @@ input, select {
         overflow-y: auto;
     }
 }
-
-@media (max-width: 480px) {
-    .cart-content li {
-        padding: 10px 0;
-    }
-
-    .cart-content li button {
-        font-size: 20px;
-    }
-}
-
-button {
-    transition: transform 0.1s ease;
-}
-
-button:active {
-    transform: scale(0.96);
-}
-
-/* ===== FORCE MOBILE FIX ===== */
-@media (max-width: 900px) {
-
-    .products {
-        grid-template-columns: 1fr !important;
-    }
-
-    #cartCount {
-        position: fixed !important;
-        bottom: 15px;
-        right: 15px;
-        background: #27ae60;
-        color: white;
-        padding: 14px 18px;
-        border-radius: 30px;
-        font-size: 16px;
-        z-index: 999;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    }
-
-    header {
-        text-align: center;
-    }
-
-    .product button {
-        width: 100%;
-        padding: 16px;
-        font-size: 17px;
-        border-radius: 10px;
-    }
-
-    section {
-        margin: 10px;
-        padding: 15px;
-    }
-
-    .cart-content {
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        border-radius: 0;
-    }
-}
-
-filter: blur(1px) brightness(0.85);
-
-
-@media (max-width: 768px) {
-    body::before {
-        background-image: url("/static/bg.jpg");
-        filter: brightness(0.75);
-    }
-}
-
-.fade-up {
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeUp 0.6s ease-out forwards;
-}
-
-@keyframes fadeUp {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* анимация кнопки купить */
-button.buy-anim {
-    animation: buyPulse 0.3s ease;
-}
-
-@keyframes buyPulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(0.9); }
-    100% { transform: scale(1); }
-}
-
-/* анимация корзины */
-#cartCount.cart-bounce {
-    animation: cartBounce 0.4s ease;
-}
-
-@keyframes cartBounce {
-    0%   { transform: scale(1); }
-    30%  { transform: scale(1.2); }
-    60%  { transform: scale(0.95); }
-    100% { transform: scale(1); }
-}
-
-.buy-anim {
-    animation: buyPulse 0.3s ease;
-}
-
-@keyframes buyPulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(0.9); }
-    100% { transform: scale(1); }
-}
-
-#cartCount.cart-bounce {
-    animation: cartBounce 0.4s ease;
-}
-
-@keyframes cartBounce {
-    0% { transform: scale(1); }
-    30% { transform: scale(1.2); }
-    60% { transform: scale(0.95); }
-    100% { transform: scale(1); }
-}
-
-#cartCount.cart-bounce {
-    animation: cartBounce 0.5s cubic-bezier(.34,1.56,.64,1);
-}
-
-@media (max-width: 768px) {
-
-    header {
-        position: relative;
-        padding-bottom: 10px;
-    }
-
-    #cartCount {
-        position: fixed;
-        bottom: 16px;
-        right: 16px;
-
-        background: #111;
-        color: #fff;
-        padding: 12px 16px;
-        border-radius: 30px;
-
-        font-size: 14px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-        z-index: 1000;
-    }
-}
-
-/* ===== MOBILE FIX ===== */
-@media (max-width: 768px) {
-
-    header {
-        position: static !important;
-    }
-
-    #cartCount {
-        position: fixed !important;
-        bottom: 16px;
-        right: 16px;
-
-        top: auto !important;
-        float: none !important;
-
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-
-        background: #111;
-        color: #fff;
-        padding: 12px 16px;
-        border-radius: 30px;
-
-        font-size: 14px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-        z-index: 9999;
-    }
-}
-
-#cartCount {
-    font-size: 16px;
-    cursor: pointer;
-    display: inline-block;
-}
-
-/* мобильная версия */
-@media (max-width: 768px) {
-
-    header {
-        position: static;
-    }
-
-    #cartCount {
-        position: fixed;
-        bottom: 16px;
-        right: 16px;
-
-        background: #111;
-        color: #fff;
-        padding: 12px 16px;
-        border-radius: 30px;
-
-        font-size: 14px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-        z-index: 9999;
-    }
-}
-
-#cartCount {
-    position: fixed;
-    top: 16px;
-    right: 16px;
-
-    font-size: 16px;
-    cursor: pointer;
-    z-index: 9999;
-}
-
-/* мобильная версия */
-@media (max-width: 768px) {
-    #cartCount {
-        top: auto;
-        bottom: 16px;
-        right: 16px;
-
-        background: #111;
-        color: #fff;
-        padding: 12px 16px;
-        border-radius: 30px;
-
-        font-size: 14px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-    
