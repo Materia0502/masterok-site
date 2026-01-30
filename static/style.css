@@ -484,6 +484,36 @@ button.buy-anim {
     }
 }
 
+/* ===== MOBILE FIX ===== */
+@media (max-width: 768px) {
+
+    header {
+        position: static !important;
+    }
+
+    #cartCount {
+        position: fixed !important;
+        bottom: 16px;
+        right: 16px;
+
+        top: auto !important;
+        float: none !important;
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        background: #111;
+        color: #fff;
+        padding: 12px 16px;
+        border-radius: 30px;
+
+        font-size: 14px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        z-index: 9999;
+    }
+}
+
 
 
 
