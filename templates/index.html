@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Стройматериалы</title>
-    <link rel="stylesheet" href="/static/style.css?v=10">
+    <link rel="stylesheet" href="/static/style.css?v=20">
 </head>
 
 <body>
@@ -13,9 +13,7 @@
     Мастерок
 </header>
 
-<div id="cartCount">
-    🛒 Корзина (0)
-</div>
+<div id="cartCount">🛒 Корзина (0)</div>
 
 <section class="fade-up">
     <h2>Каталог</h2>
@@ -25,7 +23,11 @@
         <div class="product fade-up">
             <h3>{{ p.name }}</h3>
             <p>Цена: {{ p.price }} ₽</p>
-            <button onclick="addToCart('{{ p.name }}', {{ p.price }})">
+            <button
+                data-name="{{ p.name }}"
+                data-price="{{ p.price }}"
+                onclick="addToCart(this)"
+            >
                 Купить
             </button>
         </div>
@@ -71,7 +73,7 @@ toTopBtn.onclick = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
 };
 
-/* ===== CART (ПРОСТО И СТАБИЛЬНО) ===== */
+/* ===== CART ===== */
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 function saveCart() {
@@ -79,11 +81,97 @@ function saveCart() {
 }
 
 function updateCart() {
+    const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
     document.getElementById("cartCount").innerText =
-        "🛒 Корзина (" + cart.length + ")";
+        "🛒 Корзина (" + totalQty + ")";
 }
 
-function addToCart(name, price) {
-    cart.push({ name, price });
+function addToCart(btn) {
+    const name = btn.dataset.name;
+    const price = Number(btn.dataset.price);
+
+    const existing = cart.find(item => item.name === name);
+
+    if (existing) {
+        existing.qty += 1;
+    } else {
+        cart.push({ name, price, qty: 1 });
+    }
+
     saveCart();
-    update
+    updateCart();
+}
+
+function openCart() {
+    document.getElementById("cartModal").style.display = "block";
+    renderCart();
+}
+
+function renderCart() {
+    const list = document.getElementById("cartItems");
+    list.innerHTML = "";
+
+    let total = 0;
+
+    cart.forEach((item, index) => {
+        total += item.price * item.qty;
+
+        const li = document.createElement("li");
+        li.innerHTML = `
+            <span>
+                ${item.name}<br>
+                ${item.price} ₽ × ${item.qty}
+            </span>
+            <div style="display:flex; gap:6px;">
+                <button onclick="changeQty(${index}, -1)">−</button>
+                <button onclick="changeQty(${index}, 1)">+</button>
+                <button onclick="removeItem(${index})">❌</button>
+            </div>
+        `;
+        list.appendChild(li);
+    });
+
+    const totalLi = document.createElement("li");
+    totalLi.style.fontWeight = "bold";
+    totalLi.style.marginTop = "10px";
+    totalLi.innerText = "Итого: " + total + " ₽";
+    list.appendChild(totalLi);
+}
+
+function changeQty(index, delta) {
+    cart[index].qty += delta;
+
+    if (cart[index].qty <= 0) {
+        cart.splice(index, 1);
+    }
+
+    saveCart();
+    updateCart();
+    renderCart();
+}
+
+function removeItem(index) {
+    cart.splice(index, 1);
+    saveCart();
+    updateCart();
+    renderCart();
+}
+
+function clearCart() {
+    cart = [];
+    saveCart();
+    updateCart();
+    document.getElementById("cartItems").innerHTML = "";
+}
+
+function closeCart() {
+    document.getElementById("cartModal").style.display = "none";
+}
+
+document.getElementById("cartCount").onclick = openCart;
+updateCart();
+</script>
+
+</body>
+</html>
+
