@@ -291,8 +291,11 @@ button:active {
     }
 }
 
-.cart-content {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+.cart-content button {
+    margin-top: 10px;
 }
+
+#cartItems {
+    margin-bottom: 10px;
+}
+
