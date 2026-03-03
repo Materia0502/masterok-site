@@ -46,7 +46,10 @@ def add():
         return redirect("/admin")
 
     name = request.form["name"]
-    price = int(request.form["price"])
+    price = request.form.get("price", "")
+    # try convert numeric price to int for convenience
+    if price.isdigit():
+        price = int(price)
 
     products = load_products()
     products.append({"name": name, "price": price})
@@ -78,7 +81,9 @@ def edit(index):
         return redirect("/admin")
 
     name = request.form["name"]
-    price = int(request.form["price"])
+    price = request.form.get("price", "")
+    if price.isdigit():
+        price = int(price)
 
     products = load_products()
     products[index]["name"] = name
@@ -90,4 +95,3 @@ def edit(index):
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
-

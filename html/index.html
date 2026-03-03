@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мастерок — стройматериалы</title>
+    <link rel="stylesheet" href="/static/style.css?v=30">
+</head>
+
+<body>
+
+<header class="fade-up">
+    Мастерок
+</header>
+
+<div id="cartCount">🛒 Корзина (0)</div>
+
+<section class="fade-up">
+    <h2>Каталог</h2>
+
+    <div class="products">
+        {% for p in products %}
+        <div class="product fade-up">
+            <h3>{{ p.name }}</h3>
+            <p>Цена: {{ p.price }}{% if p.price is number %} ₽{% endif %}</p>
+            {% if p.price is number %}
+            <button
+                data-name="{{ p.name }}"
+                data-price="{{ p.price }}"
+                onclick="addToCart(this)"
+            >
+                Купить
+            </button>
+            {% else %}
+            <button disabled style="opacity:0.6; cursor:default;">Цена договорная</button>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="fade-up">
+    <h2>Заявка в команду</h2>
+    <form method="post" action="/team">
+        <input type="text" name="name" placeholder="Ваше имя" required>
+        <input type="text" name="phone" placeholder="Телефон" required>
+        <select name="service">
+            <option>Доставка</option>
+            <option>Консультация</option>
+            <option>Оптовый заказ</option>
+        </select>
+        <button type="submit">Отправить</button>
+    </form>
+</section>
+
+<button id="toTop">↑</button>
+
+<!-- ===== CART MODAL ===== -->
+<div id="cartModal" class="cart-modal">
+    <div class="cart-content fade-up">
+        <h3>Корзина</h3>
+        <ul id="cartItems"></ul>
+        <button onclick="clearCart()">Очистить</button>
+        <button onclick="closeCart()">Закрыть</button>
+    </div>
+</div>
+
+<script>
+/* ===== SCROLL TO TOP ===== */
+const toTopBtn = document.getElementById("toTop");
+
+window.addEventListener("scroll", () => {
+    toTopBtn.style.display = window.scrollY > 300 ? "block" : "none";
+});
+
+toTopBtn.onclick = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+/* ===== CART ===== */
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+function updateCart() {
+    const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+    document.getElementById("cartCount").innerText =
+        "🛒 Корзина (" + totalQty + ")";
+}
+
+function addToCart(btn) {
+    const name = btn.dataset.name;
+    const price = Number(btn.dataset.price);
+
+    if (isNaN(price)) {
+        // price is not a number, nothing to add
+        return;
+    }
+
+    const item = cart.find(i => i.name === name);
+
+    if (item) {
+        item.qty++;
+    } else {
+        cart.push({ name, price, qty: 1 });
+    }
+
+    saveCart();
+    updateCart();
+}
+
+function openCart() {
+    document.getElementById("cartModal").style.display = "block";
+    renderCart();
+}
+
+function renderCart() {
+    const list = document.getElementById("cartItems");
+    list.innerHTML = "";
+
+    let total = 0;
+
+    cart.forEach((item, index) => {
+        total += item.price * item.qty;
+
+        const li = document.createElement("li");
+        li.innerHTML = `
+            <span>${item.name} — ${item.price} ₽ × ${item.qty}</span>
+            <div style="display:flex; gap:6px;">
+                <button onclick="changeQty(${index}, -1)">−</button>
+                <button onclick="changeQty(${index}, 1)">+</button>
+                <button onclick="removeItem(${index})">❌</button>
+            </div>
+        `;
+        list.appendChild(li);
+    });
+
+    const totalLi = document.createElement("li");
+    totalLi.style.fontWeight = "bold";
+    totalLi.style.marginTop = "10px";
+    totalLi.innerText = "Итого: " + total + " ₽";
+    list.appendChild(totalLi);
+}
+
+function changeQty(index, delta) {
+    cart[index].qty += delta;
+
+    if (cart[index].qty <= 0) {
+        cart.splice(index, 1);
+    }
+
+    saveCart();
+    updateCart();
+    renderCart();
+}
+
+function removeItem(index) {
+    cart.splice(index, 1);
+    saveCart();
+    updateCart();
+    renderCart();
+}
+
+function clearCart() {
+    cart = [];
+    saveCart();
+    updateCart();
+    document.getElementById("cartItems").innerHTML = "";
+}
+
+function closeCart() {
+    document.getElementById("cartModal").style.display = "none";
+}
+
+document.getElementById("cartCount").onclick = openCart;
+updateCart();
+</script>
+
+</body>
+</html>

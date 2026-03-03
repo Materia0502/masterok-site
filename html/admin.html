@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Админка</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="admin-wrapper">
+    <div class="admin-card">
+        <h2>Админ-панель</h2>
+
+        <a href="/logout" class="logout-btn">Выйти</a>
+
+
+        <h3>Добавить товар</h3>
+        <form method="post" action="/add" class="admin-form">
+            <input name="name" placeholder="Название товара" required>
+            <input name="price" placeholder="Цена или «договорная»" type="text" required>
+            <button type="submit">Добавить</button>
+        </form>
+
+        <h3>Товары</h3>
+        <ul class="admin-list">
+            {% for p in products %}
+            
+            <li>
+    <form method="post" action="/edit/{{ loop.index0 }}" class="edit-form">
+        <input name="name" value="{{ p.name }}">
+        <input name="price" type="text" value="{{ p.price }}" placeholder="Цена или договорная">
+        <button type="submit">💾</button>
+        <a href="/delete/{{ loop.index0 }}"
+           onclick="return confirm('Удалить товар?')">❌</a>
+    </form>
+</li>
+
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>
