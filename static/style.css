@@ -216,3 +216,21 @@ form button {
     50% { transform: scale(1.2); }
     100% { transform: scale(1); }
 }
+
+.contact-phone {
+    max-width: 1200px;
+    margin: 12px auto 0;
+    padding: 10px 20px;
+    color: #fff;
+    font-weight: 600;
+}
+
+.contact-phone a {
+    color: #ffd54f;
+    text-decoration: none;
+    margin-left: 8px;
+}
+
+.contact-phone a:hover {
+    text-decoration: underline;
+}
